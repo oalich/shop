@@ -15,7 +15,7 @@
 
   "dependencies": {
     "lodash": "^4.17.5",
-    "jquery": "^2.2.4"
+    "jquery": "^3.4.1"
   },
 
   "devDependencies": {
