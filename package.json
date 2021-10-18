@@ -1,59 +1,28 @@
-// package.json
-
 {
-  "name": "shop",
-  "version": "0.0.1",
-  "main": "index.js",
-  "private": true,
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+  "name": "dp-ui-efiliale",
+  "version": "0.1.0",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-nodeunit": "~0.4.1",
+    "grunt-contrib-uglify": "^0.5.1",
+    "grunt-postcss": "^0.9.0",
+    "grunt-purgecss": "^2.3.0",
+    "tailwindcss": "^1.9.6"
   },
-  "keywords": [],
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "grunt-autoprefixer": "^3.0.4",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-coffee": "^1.0.0",
+    "grunt-contrib-less": "^1.4.1",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-ng-classify": "^3.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "author": "",
   "license": "ISC",
-
-  "dependencies": {
-    "lodash": "^4.17.5",
-    "jquery": "^3.4.1",
-    "jquery-ui": "^1.12.1",
-    "axios": "^0.18.1",
-    "es6-promise": "^4.2.8",
-    "less": "^3.10.3",
-    "less-loader": "^4.1.0",
-    "promise-polyfill": "^8.1.3",
-    "underscore": "^1.9.1",
-    "vee-validate": "^2.2.14",
-    "vue": "^2.6.10",
-    "vue-axios": "^2.1.5",
-    "vue-router": "^3.1.3",
-    "vuejs-logger": "1.5.3",
-    "vuex": "^3.1.1",
-    "whatwg-fetch": "^3.0.0"
-  },
-
-  "devDependencies": {
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2",
-    "@babel/plugin-proposal-optional-chaining": "^7.6.0",
-    "@vue/cli-plugin-babel": "^3.12.1",
-    "@vue/cli-service": "^3.12.1",
-    "axios-mock-adapter": "^1.17.0",
-    "vue-template-compiler": "^2.6.10",
-    "webpack-encoding-plugin": "^0.3.1"
-  },
-  
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "ie >= 10"
-  ]
+  "description": ""
 }
