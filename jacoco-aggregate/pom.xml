@@ -1,0 +1,222 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>de.dpag</groupId>
+		<artifactId>efiliale</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>jacoco-aggregate</artifactId>
+	<name>jacoco-aggregate</name>
+	<description>jacoco-aggregate module</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<build.directory.projecta>../efilialeCore/target</build.directory.projecta>
+		<build.directory.projectb>../efilialeShop/target</build.directory.projectb>
+		<build.directory.projectc>../efilialeVer/target</build.directory.projectc>
+
+		<classes.directory.projecta>../efilialeCore/target/classes</classes.directory.projecta>
+		<classes.directory.projectb>../efilialeShop/target/classes</classes.directory.projectb>
+		<classes.directory.projectc>../efilialeVer/target/classes</classes.directory.projectc>
+
+		<sources.directory.projecta>../efilialeCore/src/main/java</sources.directory.projecta>
+		<sources.directory.projectb>../efilialeShop/src/main/java</sources.directory.projectb>
+		<sources.directory.projectc>../efilialeVer/src/main/java</sources.directory.projectc>
+
+		<generated-sources.directory.projecta>../efilialeCore/target/generated-sources/annotations</generated-sources.directory.projecta>
+		<generated-sources.directory.projectb>../efilialeShop/target/generated-sources/annotations</generated-sources.directory.projectb>
+		<generated-sources.directory.projectc>../efilialeVer/target/generated-sources/annotations</generated-sources.directory.projectc>
+	</properties>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>lcm-tqs-releases</id>
+			<name>TQS Releases</name>
+			<url>https://lcm.deutschepost.de/artifactory/tqs_release/</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<dependencies>
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>org.jacoco.agent</artifactId>
+			<classifier>runtime</classifier>
+			<scope>test</scope>
+			<version>0.8.5</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<!-- Copy the ant tasks jar. Needed for ts.jacoco.report-ant . -->
+					<execution>
+						<id>jacoco-dependency-ant</id>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<phase>process-test-resources</phase>
+						<inherited>false</inherited>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.jacoco</groupId>
+									<artifactId>org.jacoco.ant</artifactId>
+									<version>0.8.5</version>
+								</artifactItem>
+							</artifactItems>
+							<stripVersion>true</stripVersion>
+							<outputDirectory>${basedir}/target/jacoco-jars</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>report-aggregate</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<!-- Execute an ant task within maven -->
+								<echo message="Generating JaCoCo Reports" />
+								<taskdef name="report" classname="org.jacoco.ant.ReportTask">
+									<classpath path="${basedir}/target/jacoco-jars/org.jacoco.ant.jar" />
+								</taskdef>
+								<mkdir dir="${basedir}/target/coverage-report" />
+								<report>
+									<executiondata>
+										<fileset dir="${build.directory.projecta}">
+											<include name="jacoco.exec" />
+										</fileset>
+										<fileset dir="${build.directory.projectb}">
+											<include name="jacoco.exec" />
+										</fileset>
+										<fileset dir="${build.directory.projectc}">
+											<include name="jacoco.exec" />
+										</fileset>
+									</executiondata>
+									<structure name="jacoco-multi Coverage Project">
+										<group name="jacoco-multi">
+											<classfiles>
+												<fileset dir="${classes.directory.projecta}" />
+												<fileset dir="${classes.directory.projectb}" />
+												<fileset dir="${classes.directory.projectc}" />
+											</classfiles>
+											<sourcefiles encoding="UTF-8">
+												<fileset dir="${sources.directory.projecta}" />
+												<fileset dir="${sources.directory.projectb}" />
+												<fileset dir="${sources.directory.projectc}" />
+											</sourcefiles>
+										</group>
+									</structure>
+									<html destdir="${basedir}/target/coverage-report/html" />
+									<xml destfile="${basedir}/target/coverage-report/coverage-report.xml" />
+									<csv destfile="${basedir}/target/coverage-report/coverage-report.csv" />
+								</report>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.jacoco</groupId>
+						<artifactId>org.jacoco.ant</artifactId>
+						<version>0.8.5</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.7.0.1746</version>
+			</plugin>
+			<plugin>
+				<groupId>de.deutschepost.tqs</groupId>
+				<artifactId>oslc-maven-plugin</artifactId>
+				<version>0.0.6</version>
+				<executions>
+					<execution>
+						<id>oslc</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>analyze</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+				<configuration>
+					<additionalClasspathElements>
+						<additionalClasspathElement>jacocoagent.jar</additionalClasspathElement>
+					</additionalClasspathElements>
+					<systemPropertyVariables>
+						<jacoco-agent.destfile>${project.build.directory}/jacoco.exec</jacoco-agent.destfile>
+					</systemPropertyVariables>
+					<reuseForks>false</reuseForks>
+					<forkCount>1</forkCount>
+					<includes>
+						<include>*TestV*.java</include>
+					</includes>
+					<testFailureIgnore>true</testFailureIgnore>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.5</version>
+				<executions>
+					<!--Performs offline instrumentation. -->
+					<execution>
+						<id>default-instrument</id>
+						<goals>
+							<goal>instrument</goal>
+						</goals>
+					</execution>
+					<!--Restores original classes as they were before offline instrumentation. -->
+					<execution>
+						<id>default-restore-instrumented-classes</id>
+						<goals>
+							<goal>restore-instrumented-classes</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>6.3.1</version>
+				<configuration>
+                	<format>ALL</format>
+					<failOnError>false</failOnError>
+					<suppressionFiles>
+						<suppressionFile>jacoco-aggregate/suppressions.xml</suppressionFile>
+					</suppressionFiles>
+              	</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
