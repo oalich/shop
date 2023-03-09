@@ -6,9 +6,7 @@
 		<artifactId>efiliale</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>jacoco-aggregate</artifactId>
-	<name>jacoco-aggregate</name>
-	<description>jacoco-aggregate module</description>
+	<artifactId>oslc-scan</artifactId>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<build.directory.projecta>../efilialeCore/target</build.directory.projecta>
@@ -38,9 +36,9 @@
 		<dependency>
 			<groupId>org.jacoco</groupId>
 			<artifactId>org.jacoco.agent</artifactId>
+			<version>${jacoco.agent.version}</version>
 			<classifier>runtime</classifier>
 			<scope>test</scope>
-			<version>0.8.5</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -62,7 +60,7 @@
 								<artifactItem>
 									<groupId>org.jacoco</groupId>
 									<artifactId>org.jacoco.ant</artifactId>
-									<version>0.8.5</version>
+									<version>${jacoco.agent.version}</version>
 								</artifactItem>
 							</artifactItems>
 							<stripVersion>true</stripVersion>
@@ -74,7 +72,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
+				<version>${maven-antrun.version}</version>
 				<executions>
 					<execution>
 						<id>report-aggregate</id>
@@ -128,19 +126,25 @@
 					<dependency>
 						<groupId>org.jacoco</groupId>
 						<artifactId>org.jacoco.ant</artifactId>
-						<version>0.8.5</version>
+						<version>${jacoco.agent.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.7.0.1746</version>
+				<version>3.9.1.2184</version>
 			</plugin>
 			<plugin>
 				<groupId>de.deutschepost.tqs</groupId>
 				<artifactId>oslc-maven-plugin</artifactId>
 				<version>0.0.6</version>
+                <configuration>
+                    <projectLicenseFile>../src/license/licenses_eFiliale.xml</projectLicenseFile>
+                    <excludedGroupIdPattern>(de.dpag|atg|com.oracle.weblogic|(javax.xml|oracle).xml|com.sun.(media.jai|security)).*</excludedGroupIdPattern>
+                    <verifyCompliance>true</verifyCompliance>
+                    <offline>false</offline>
+                </configuration>
 				<executions>
 					<execution>
 						<id>oslc</id>
@@ -154,7 +158,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
+				<version>${maven-surefire.version}</version>
 				<configuration>
 					<additionalClasspathElements>
 						<additionalClasspathElement>jacocoagent.jar</additionalClasspathElement>
@@ -173,7 +177,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.5</version>
+				<version>${jacoco.version}</version>
 				<executions>
 					<!--Performs offline instrumentation. -->
 					<execution>
@@ -201,8 +205,13 @@
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
-				<version>6.3.1</version>
+				<version>8.0.2</version>
 				<configuration>
+				<!--exclude jars which are used only for build teh appliaction. -->
+				<excludes>
+				  <exclude>org.codehaus.woodstox:stax2-api</exclude>
+				  <exclude>org.codehaus.woodstox:woodstox-core-asl</exclude>
+				</excludes>
                 	<format>ALL</format>
 					<failOnError>false</failOnError>
 					<suppressionFiles>
@@ -219,4 +228,6 @@
 			</plugin>
 		</plugins>
 	</build>
+	<name>eFiliale</name>
+	<groupId>de.dpag.efiliale</groupId>
 </project>

@@ -15,7 +15,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>properties-maven-plugin</artifactId>
-				<version>1.0-alpha-1</version>
+				<version>${properties-maven.version}</version>
 				<executions>
 					<execution>
 						<phase>pre-clean</phase>
@@ -33,7 +33,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>${maven-clean.version}</version>
 				<executions>
 					<execution>
 						<id>lock-clean</id>
@@ -71,7 +71,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.2.0</version>
+				<version>${maven-resources.version}</version>
 				<executions>
 					<execution>
 						<id>lock-copy-meta-inf</id>
@@ -193,7 +193,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
+				<version>${maven-antrun.version}</version>
 				<executions>
 					<execution>
 						<id>lock-copy-security</id>

@@ -28,7 +28,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>properties-maven-plugin</artifactId>
-				<version>1.0-alpha-1</version>
+				<version>${properties-maven.version}</version>
 				<executions>
 					<execution>
 						<phase>pre-clean</phase>
@@ -46,7 +46,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>${maven-clean.version}</version>
 				<configuration>
 					<filesets>
 						<fileset>
@@ -59,31 +59,6 @@
 					</filesets>
 				</configuration>
 			</plugin>
-			<!-- <plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.1.0</version>
-				<executions>
-					<execution>
-						<id>ShopEar-copy-jar</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${atg.dir}/efilialeShop/lib</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${atg.dir}/efilialeCore/lib</directory>
-									<includes>
-										<include>**/*</include>
-									</includes>
-									<filtering>true</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin> -->
 			<plugin>
 				<groupId>com.oracle.atg.ateam</groupId>
 				<artifactId>atg-runAssembler-plugin</artifactId>
@@ -105,7 +80,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
+				<version>${maven-antrun.version}</version>
 				<executions>
 					<execution>
 						<id>ShopEar-copy-meta-inf</id>
