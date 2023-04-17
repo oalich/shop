@@ -10,7 +10,7 @@
 	<name>jacoco-aggregate</name>
 	<description>jacoco-aggregate module</description>
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>		
 		<build.directory.projecta>../frontend/target</build.directory.projecta>
 
 		<classes.directory.projecta>../frontend/target/classes</classes.directory.projecta>
@@ -19,6 +19,14 @@
 
 		<generated-sources.directory.projecta>../frontend/target/generated-sources/annotations</generated-sources.directory.projecta>
 		 <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
+		  <!-- https://mvnrepository.com/artifact/org.jacoco/org.jacoco.agent -->
+        <jacoco.agent.version>0.8.8</jacoco.agent.version>     
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-antrun-plugin -->
+        <maven-antrun.version>3.1.0</maven-antrun.version>  
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
+        <maven-surefire.version>3.0.0-M7</maven-surefire.version>
+        <!-- https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
+        <jacoco.version>0.8.8</jacoco.version> 
 	</properties>
 	<pluginRepositories>
 		<pluginRepository>
@@ -33,7 +41,7 @@
 			<artifactId>org.jacoco.agent</artifactId>
 			<classifier>runtime</classifier>
 			<scope>test</scope>
-			<version>0.8.5</version>
+			<version>${jacoco.agent.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -55,7 +63,7 @@
 								<artifactItem>
 									<groupId>org.jacoco</groupId>
 									<artifactId>org.jacoco.ant</artifactId>
-									<version>0.8.5</version>
+									<version>${jacoco.agent.version}</version>
 								</artifactItem>
 							</artifactItems>
 							<stripVersion>true</stripVersion>
@@ -67,7 +75,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
+				<version>${maven-antrun.version}</version>
 				<executions>
 					<execution>
 						<id>report-aggregate</id>
@@ -111,14 +119,14 @@
 					<dependency>
 						<groupId>org.jacoco</groupId>
 						<artifactId>org.jacoco.ant</artifactId>
-						<version>0.8.5</version>
+						<version>${jacoco.agent.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.7.0.1746</version>
+				<version>3.9.1.2184</version>
 			</plugin>
 			<plugin>
 				<groupId>de.deutschepost.tqs</groupId>
@@ -137,7 +145,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
+				<version>${maven-surefire.version}</version>
 				<configuration>
 					<additionalClasspathElements>
 						<additionalClasspathElement>jacocoagent.jar</additionalClasspathElement>
@@ -156,7 +164,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.5</version>
+				<version>${jacoco.version}</version>
 				<executions>
 					<!--Performs offline instrumentation. -->
 					<execution>
@@ -184,7 +192,7 @@
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
-				<version>7.1.0</version>
+				<version>8.0.2</version>
 				<configuration>
                 	<format>ALL</format>
 					<failOnError>false</failOnError>

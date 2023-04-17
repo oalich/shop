@@ -923,7 +923,7 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.7.1</version>
+            <version>7.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -1193,7 +1193,7 @@
         <dependency>
             <groupId>de.dpag.efiliale.communication.sap.point.service</groupId>
             <artifactId>point_service</artifactId>
-            <version>4.0</version>
+            <version>5.0</version>
         </dependency>
         <dependency>
             <groupId>de.dpag.efiliale.communication.sap.point.service.response</groupId>
