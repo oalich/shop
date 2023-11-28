@@ -202,10 +202,11 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- https://mvnrepository.com/artifact/org.owasp/dependency-check-maven/8.3.1 -->
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
-				<version>8.0.2</version>
+				<version>8.3.1</version>
 				<configuration>
 				<!--exclude jars which are used only for build teh appliaction. -->
 				<excludes>

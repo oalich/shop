@@ -113,6 +113,9 @@
 										<exclude>**/scripts/poboxavis/src/**</exclude>
 										<exclude>**/scripts/poboxavis/gulpfile.js</exclude>
 										<exclude>**/scripts/poboxavis/*.json</exclude>
+										<exclude>**/scripts/postscan/src/**</exclude>
+										<exclude>**/scripts/postscan/gulpfile.js</exclude>
+										<exclude>**/scripts/postscan/*.json</exclude>
 									</excludes>
 								</resource>
 							</resources>
