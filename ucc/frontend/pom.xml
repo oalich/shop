@@ -3,10 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.6</version>
+		<version>3.1.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.dpdhl.ncs.ucc</groupId>
@@ -16,7 +17,7 @@
 	<name>User Customs Clearance Application</name>
 	<description>User Customs Clearance Application</description>
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>17</java.version>
 		<siteVal>${site}</siteVal>
 	</properties>
 	<dependencies>
@@ -70,6 +71,7 @@
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
@@ -85,12 +87,8 @@
 			<artifactId>liquibase-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>org.hibernate.orm</groupId>
 			<artifactId>hibernate-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
@@ -99,7 +97,7 @@
 		<dependency>
 			<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
-			<version>9.15.2</version>
+			<version>9.37.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -110,40 +108,34 @@
 			<artifactId>ojdbc8</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-spring-boot</artifactId>
-			<version>2.25.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-bindy</artifactId>
-			<version>2.25.4</version>
+			<version>1.6.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20231013</version>
+			<version>[20231013,)</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
-			<version>2.3.5</version>
+			<version>3.1.1</version>
 		</dependency>
+		 <!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
 		<dependency>
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
-			<version>2.0.25</version>
+			<version>2.0.28</version>
 		</dependency>
+		 <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.11.0</version>
+			<version>2.15.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.idautomation.linear</groupId>
@@ -155,8 +147,32 @@
 			<artifactId>IDADataMatrix</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>org.jacoco.agent</artifactId>
+			<classifier>runtime</classifier>
+			<scope>test</scope>
+			<version>0.8.8</version>
+		</dependency>
+		<dependency>
+						<groupId>org.jacoco</groupId>
+						<artifactId>org.jacoco.ant</artifactId>
+						<version>0.8.8</version>
+					</dependency>
 	</dependencies>
-
+	<pluginRepositories>
+		<pluginRepository>
+			<id>lcm-tqs-releases</id>
+			<name>TQS Releases</name>
+			<url>https://lcm.deutschepost.de/artifactory/tqs_release/</url>
+		</pluginRepository>
+	</pluginRepositories>
+<profiles>
+		<profile>
+			<id>frontendProfile</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 	<build>
 		<plugins>
 			<plugin>
@@ -173,4 +189,47 @@
 			</plugin>
 		</plugins>
 	</build>
+	</profile>
+	<profile>
+			<id>testReport</id>
+			<build>
+				<plugins>
+				<plugin>
+				<groupId>de.deutschepost.tqs</groupId>
+				<artifactId>oslc-maven-plugin</artifactId>
+				<version>0.0.6</version>
+				<executions>
+					<execution>
+						<id>oslc</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>analyze</goal>
+						</goals>
+					</execution>
+				</executions>
+				</plugin>
+				<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>8.0.2</version>
+				<configuration>
+                	<format>ALL</format>
+					<failOnError>false</failOnError>
+					<suppressionFiles>
+						<suppressionFile>../jacoco-aggregate/suppressions.xml</suppressionFile>
+					</suppressionFiles>
+              	</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+				</plugins>
+				</build>
+				</profile>
+
+	</profiles>
 </project>

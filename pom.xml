@@ -12,19 +12,19 @@
         <argLine>-Xmx2G -XX:MetaspaceSize=512M -XX:MaxMetaspaceSize=2G -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/export/jenkins/heapdump -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xloggc:/export/jenkins/heapdump/gc.log</argLine>
         <atg-depdendency.version>11.3.2</atg-depdendency.version>
         <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/properties-maven-plugin -->
-        <properties-maven.version>1.1.0</properties-maven.version>
+        <properties-maven.version>1.2.1</properties-maven.version>
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
-        <maven-surefire.version>3.0.0-M7</maven-surefire.version>
+        <maven-surefire.version>3.2.3</maven-surefire.version>
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-clean-plugin -->
-        <maven-clean.version>3.3.1</maven-clean.version>
+        <maven-clean.version>3.3.2</maven-clean.version>
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-resources-plugin -->
         <maven-resources.version>3.3.1</maven-resources.version>
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-antrun-plugin -->
         <maven-antrun.version>3.1.0</maven-antrun.version>
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin -->
-        <maven-dependency.version>3.6.0</maven-dependency.version>
+        <maven-dependency.version>3.6.1</maven-dependency.version>
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
         <maven-jar.version>3.3.0</maven-jar.version>
         <!-- https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
@@ -43,6 +43,27 @@
         <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
     </properties>
     <dependencies>
+
+ <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-ear-plugin -->
+<dependency>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-ear-plugin</artifactId>
+    <version>3.3.0</version>
+	<exclusions>
+        <exclusion>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.codehaus.plexus/plexus-archiver -->
+<dependency>
+    <groupId>org.codehaus.plexus</groupId>
+    <artifactId>plexus-archiver</artifactId>
+    <version>4.9.0</version>
+</dependency>
+
+
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-resources-plugin -->
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
@@ -1086,7 +1107,7 @@
         <dependency>
             <groupId>org.owasp.esapi</groupId>
             <artifactId>esapi</artifactId>
-            <version>2.5.2.0</version>
+            <version>2.5.3.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/ca.juliusdavies/not-yet-commons-ssl -->
         <dependency>
