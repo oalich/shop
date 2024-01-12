@@ -187,8 +187,9 @@
 				<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
-				<version>8.0.2</version>
+				<version>9.0.8</version>
 				<configuration>
+					<nvdApiKey>d87ea380-c2bb-4b9e-97df-360699e1efb8</nvdApiKey>
                 	<format>ALL</format>
 					<failOnError>false</failOnError>
 					<suppressionFiles>

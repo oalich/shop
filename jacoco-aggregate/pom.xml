@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>de.dpag</groupId>
@@ -139,12 +138,12 @@
 				<groupId>de.deutschepost.tqs</groupId>
 				<artifactId>oslc-maven-plugin</artifactId>
 				<version>0.0.6</version>
-                <configuration>
-                    <projectLicenseFile>../src/license/licenses_eFiliale.xml</projectLicenseFile>
-                    <excludedGroupIdPattern>(de.dpag|atg|com.oracle.weblogic|(javax.xml|oracle).xml|com.sun.(media.jai|security)).*</excludedGroupIdPattern>
-                    <verifyCompliance>true</verifyCompliance>
-                    <offline>false</offline>
-                </configuration>
+				<configuration>
+					<projectLicenseFile>../src/license/licenses_eFiliale.xml</projectLicenseFile>
+					<excludedGroupIdPattern>(de.dpag|atg|com.oracle.weblogic|(javax.xml|oracle).xml|com.sun.(media.jai|security)).*</excludedGroupIdPattern>
+					<verifyCompliance>true</verifyCompliance>
+					<offline>false</offline>
+				</configuration>
 				<executions>
 					<execution>
 						<id>oslc</id>
@@ -202,23 +201,24 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- https://mvnrepository.com/artifact/org.owasp/dependency-check-maven/8.3.1 -->
+			<!-- https://mvnrepository.com/artifact/org.owasp/dependency-check-maven/9.0.2 -->
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
-				<version>8.3.1</version>
+				<version>9.0.8</version>
 				<configuration>
-				<!--exclude jars which are used only for build teh appliaction. -->
-				<excludes>
-				  <exclude>org.codehaus.woodstox:stax2-api</exclude>
-				  <exclude>org.codehaus.woodstox:woodstox-core-asl</exclude>
-				</excludes>
-                	<format>ALL</format>
+					<nvdApiKey>d87ea380-c2bb-4b9e-97df-360699e1efb8</nvdApiKey>
+					<!--exclude jars which are used only for build teh appliaction. -->
+					<excludes>
+						<exclude>org.codehaus.woodstox:stax2-api</exclude>
+						<exclude>org.codehaus.woodstox:woodstox-core-asl</exclude>
+					</excludes>
+					<format>ALL</format>
 					<failOnError>false</failOnError>
 					<suppressionFiles>
 						<suppressionFile>jacoco-aggregate/suppressions.xml</suppressionFile>
 					</suppressionFiles>
-              	</configuration>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
