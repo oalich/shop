@@ -1,0 +1,253 @@
+import com.github.jk1.license.render.*
+
+plugins {
+    id("com.github.jk1.dependency-license-report") version "2.5"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("idea")
+    id("io.spring.dependency-management") version "1.1.0"
+    id("java")
+    id("java-library") // needed to make sure that transitive deps have 'compile' scope
+    id("maven-publish")
+    id("jacoco")
+    id("org.sonarqube") version "4.0.0.2929"
+    id("org.springframework.boot") version "3.2.3"
+    id("org.openapi.generator") version "7.1.0"
+}
+
+ext {
+    versions = [
+            springBoot: "3.2.3",
+            commercetools: "17.3.0",
+            lombok: "1.18.24",
+            mapstruct: "1.5.5.Final",
+            cucumber: "7.13.0",
+            mockito: "5.4.0",
+            junit: "5.4.0",
+            junitJupiter: "5.10.0",
+            restAssured: "5.3.2",
+            activemqArtemis: "2.31.2",
+            azureservicebus: "5.8.0",
+            okhttp3: "4.11.0",
+            zxing: "3.5.0",
+            pdfbox: "2.0.29",
+            artemisJunit: "2.31.2"
+    ]
+}
+
+version = "0.0.1-SNAPSHOT"
+group = "com.dhl.dicos"
+java.sourceCompatibility = JavaVersion.toVersion("17")
+licenseReport.excludeBoms = true
+
+repositories {
+    maven {
+        url "https://artifactory.dhl.com/maven-remote"
+    }
+}
+
+configurations {
+    configureEach {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+dependencies {
+    // Spring
+    implementation "org.springframework.boot:spring-boot-starter"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-log4j2"
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Common
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.14.2"
+    implementation "commons-lang:commons-lang:2.6"
+    implementation 'commons-io:commons-io:2.14.0'
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+    implementation "org.projectlombok:lombok:${versions.lombok}"
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation "org.apache.pdfbox:pdfbox:${versions.pdfbox}"
+    implementation "org.apache.pdfbox:xmpbox:${versions.pdfbox}"
+    implementation "com.google.zxing:core:${versions.zxing}"
+    implementation "com.google.zxing:javase:${versions.zxing}"
+    implementation "org.mapstruct:mapstruct:${versions.mapstruct}"
+    annotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${versions.mapstruct}"
+
+    // CommerceTools
+    implementation ("com.commercetools.sdk:commercetools-okhttp-client4:${versions.commercetools}") {
+        exclude(group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-common')
+    }
+    implementation "com.commercetools.sdk:commercetools-sdk-java-api:${versions.commercetools}"
+    implementation "com.commercetools.sdk:commercetools-sdk-java-importapi:${versions.commercetools}"
+    implementation "com.commercetools.sdk:commercetools-sdk-java-ml:${versions.commercetools}"
+
+    // OpenAPI and Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+    implementation 'io.swagger.core.v3:swagger-annotations:2.2.19'
+    implementation "org.openapitools:jackson-databind-nullable:0.2.6"
+//    implementation 'org.openapitools:openapi-generator:7.0.1'
+
+    //Opentelemetry / Observability with Spring Boot 3
+    // https://spring.io/blog/2022/10/12/observability-with-spring-boot-3/
+    // To add observation features (to add Micrometer to the classpath)
+    implementation "org.springframework.boot:spring-boot-starter-actuator:${versions.springBoot}"
+    // To create observations by using the @Observed aspect
+    implementation "org.springframework.boot:spring-boot-starter-aop:${versions.springBoot}"
+    // For Micrometer metrics with Prometheus
+    implementation "io.micrometer:micrometer-registry-prometheus"
+    // For Tracing Context Propagation with Micrometer Tracing we pick Zipkin Brave by adding the
+    implementation "io.micrometer:micrometer-tracing-bridge-brave"
+    // For Latency Visualization, we need to send the finished spans in some format to a server.
+    // In our case, we produce an Zipkin-compliant span
+    // endpoint is default to "http://localhost:9411/api/v2/spans" by actuator
+    // we could setting by management.zipkin.tracing.endpoint
+    implementation "io.zipkin.reporter2:zipkin-reporter-brave"
+
+    // JMS
+    implementation("com.azure.spring:spring-cloud-azure-starter-servicebus-jms:${versions.azureservicebus}"){
+        exclude(group:'org.springframework.boot', module: 'spring-boot-starter')
+        exclude(group: 'org.springframework', module:'spring-context')
+        exclude(group: 'io.projectreactor', module:'reactor-core')
+        exclude(group: 'com.fasterxml.jackson.core')
+        exclude(group: 'com.fasterxml.jackson.datatype')
+        exclude(group: 'org.slf4j')
+        exclude(group: 'io.netty')
+        exclude(group: 'io.projectreactor.netty')
+    }
+    implementation('com.azure:azure-core-amqp:2.9.0'){
+        //excluding because we don't use azure-json classes for marshalling / unmarshalling the messages
+        exclude(group: 'com.azure', module: 'azure-json')
+    }
+    implementation('io.projectreactor.netty:reactor-netty-http:1.1.15'){
+        exclude(group: 'io.projectreactor.netty', module: 'reactor-netty-core')
+    }
+    implementation('io.projectreactor.netty:reactor-netty-core:1.1.15')
+
+    implementation ('org.springframework.boot:spring-boot-starter-artemis') {
+        exclude(group: 'rg.apache.activemq', module: 'artemis-commons')
+        exclude(group: 'rg.apache.activemq', module: 'artemis-core-client')
+        exclude(group: 'rg.apache.activemq', module: 'artemis-jakarta-client')
+        exclude(group: 'rg.apache.activemq', module: 'artemis-server')
+        exclude(group: 'rg.apache.activemq', module: 'artemis-journal')
+    }
+
+    implementation "org.apache.activemq:artemis-commons:${versions.activemqArtemis}"
+    implementation "org.apache.activemq:artemis-core-client:${versions.activemqArtemis}"
+    implementation "org.apache.activemq:artemis-jakarta-client:${versions.activemqArtemis}"
+    implementation "org.apache.activemq:artemis-server:${versions.activemqArtemis}"
+    implementation "org.apache.activemq:artemis-journal:${versions.activemqArtemis}"
+    implementation ("org.apache.activemq:artemis-jms-server:${versions.activemqArtemis}") {
+        exclude(group: 'rg.apache.activemq', module: 'artemis-commons')
+    }
+
+//    testRuntimeOnly("org.apache.activemq:artemis-jms-server:${versions.activemqArtemis}"){
+//        exclude(group: 'org.apache.activemq', module: 'artemis-commons')
+//    }
+
+    /* Test dependencies*/
+    testAnnotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "io.cucumber:cucumber-java:${versions.cucumber}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${versions.junitJupiter}"
+    testImplementation "org.mockito:mockito-core:${versions.mockito}"
+    testImplementation "org.mockito:mockito-junit-jupiter:${versions.junit}"
+    testImplementation "io.cucumber:cucumber-spring:${versions.cucumber}"
+    testImplementation "io.cucumber:cucumber-junit-platform-engine:${versions.cucumber}"
+    testImplementation "com.squareup.okhttp3:mockwebserver:${versions.okhttp3}"
+    testImplementation "com.squareup.okhttp3:okhttp:${versions.okhttp3}"
+    testImplementation "io.rest-assured:rest-assured:${versions.restAssured}"
+    testImplementation "io.cucumber:cucumber-java:${versions.cucumber}"
+    testImplementation "org.apache.activemq:artemis-junit:${versions.artemisJunit}"
+}
+
+//idea.module.sourceDirs += file('$buildDir/generated')
+//idea.module.generatedSourceDirs += file('$buildDir/generated')
+//if 'content root' (as IDEA calls it) of the module is different
+idea.module.contentRoot = file('../..')
+
+// this works, but it is not working with single quotes!!
+sourceSets.main.java.srcDirs += "$buildDir/generated/src/main/java"
+// for checking the current settings of all source Dirs, especially the generated one
+sourceSets.main.java.srcDirs.each { println "javaMains: "+it }
+
+// avoiding the clash with the OPENAPI generated Main-Class
+springBoot.mainClass = 'com.dhl.dicos.InvoicesServiceApplication'
+// always generate the API during the build task
+compileJava.dependsOn tasks.openApiGenerate
+
+sonarqube {
+    properties {
+        property("sonar.projectKey", "de.deutschepost.dicos.invoices-service")
+        property("sonar.projectName", "ITR-4195-DiCoS-invoices-service")
+        property("sonar.host.url", "https://sonarqube1.lcm.deutschepost.de")
+        property("sonar.qualitygate.wait", "true")
+        property("sonar.coverage.exclusions", "**/config/*,**/exception/*,**/constants/*,**/config/ctp/*Properties.java,**/model/*")
+        property("sonar.exclusions", "**/config/*,**/exception/*,**/constants/*,**/config/ctp/*Properties.java,**/model/*")
+    }
+}
+
+licenseReport {
+    unionParentPomLicenses = false
+    projects = [project] + project.subprojects
+    configurations = ['runtimeClasspath']
+    excludeOwnGroup = true
+    renderers = [new JsonReportRenderer('oslc-gradle-plugin-report.json', false)]
+    allowedLicensesFile = new File("allowed-licenses.json")
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+    reports {
+        xml.required = true
+        csv.required = false
+    }
+}
+
+task cucumber() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+                    '--plugin', 'pretty',
+                    '--plugin', 'junit:integration-test/cucumber.xml',
+                    '--plugin', 'html:integration-test/cucumber.html',
+                    '--glue', 'com.dhl.dicos',
+                    'src/test/resources/feature']
+        }
+    }
+}
+
+processResources {
+    filesMatching("**/application.yml") {
+        expand( project.properties )
+    }
+}
+
+openApiGenerate {
+    generatorName.set("spring") // original set to "java"
+    inputSpec = "$projectDir/src/main/resources/invoicesService.yaml"
+    outputDir.set("$buildDir/generated")
+    apiPackage.set("com.dhl.dicos.api")
+    invokerPackage.set("com.dhl.dicos.invoker")
+    modelPackage.set("com.dhl.dicos.model")
+    configOptions.set([
+            dateLibrary: "java17",
+//            identifierNamingConvention: "snake_case",
+//            useTags        : "true",  // Use tags for the naming
+//            delegatePattern: "true",   // Generating the code with the delegate pattern
+            interfaceOnly  : "true",
+            useSpringBoot3: "true"
+    ])
+}
