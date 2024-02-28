@@ -1,0 +1,24 @@
+{
+  "name": "nodebrady",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js",
+    "test": "nyc --reporter=lcov --reporter=text --reporter=cobertura mocha --exit --reporter xunit --reporter-option output=test/unittest.xml"
+  },
+  "dependencies": {
+    "koa": "^1.2.0",
+    "koa-logger": "^1.2.0",
+    "koa-static": "^2.0.0",
+    "koa-route": "^2.4.2",
+    "koa-compress": "^1.0.6",
+    "co-views": "^2.1.0",
+    "ejs": "^3.1.8",
+    "co-body": "^6.1.0"
+  },
+  "devDependencies": {
+    "supertest": "^6.3.1",
+    "mocha": "^9.0.3",
+    "nyc": "^15.1.0"
+  }
+}
