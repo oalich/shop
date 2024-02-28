@@ -1,0 +1,135 @@
+{
+  "name": "payment-widget",
+  "version": "1.6.0",
+  "description": "DPDHL Privatkunden CaaS Payment Widget",
+  "engines": {
+    "node": ">=12.13",
+    "npm": ">=6.0"
+  },
+  "scripts": {
+    "start:dev": "webpack-dev-server --mode=development --env.NODE_ENV=development",
+    "build": "webpack --mode=production",
+    "start": "serve dist -l 8080",
+    "start-with-tests": "npm run format && npm run fix && npm run lint && npm run test && npm run start",
+    "start-with-linting": "npm run format && npm run fix && npm run lint && npm run start",
+    "build-dev": "webpack --mode=development",
+    "test": "jest --collectCoverage",
+    "test-watch": "jest --watchAll",
+    "test-watch:coverage": "jest --watchAll --collectCoverage",
+    "test-single": "jest --testNamePattern 'call finalize on payment and trigger success callback'",
+    "clean": "rimraf ./dist ./node_modules/.cache",
+    "clean-dist": "rimraf ./dist",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
+    "check-format": "prettier --check \"src/**/*.{js,jsx,ts,tsx}\"",
+    "lint": "npm-run-all lint:*",
+    "lint:check-types": "tsc",
+    "lint:eslint": "eslint \"src/**/*.{js,ts,tsx}\"",
+    "lint:format": "npm-run-all check-format",
+    "fix": "npm-run-all fix:*",
+    "fix:eslint": "eslint \"src/**/*.{js,ts,tsx}\" --fix",
+    "fix:format": "npm-run-all format",
+    "codegen": "npm-run-all codegen:*",
+    "codegen:openapi": "node scripts/codegen-openapi.js",
+    "lint-and-start": "npm run format && npm run fix && npm run lint && npm run start",
+    "generateIconComponents": "npx @svgr/cli -d src/components/Icon src/assets/icons",
+    "license-report": "license-checker --customPath ./license/license-report-format.json --json --out license/licenses.json"
+  },
+  "author": "Micromata GmbH",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "@babel/core": "^7.14.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
+    "@babel/preset-env": "^7.14.1",
+    "@babel/preset-react": "^7.9.4",
+    "@babel/preset-typescript": "^7.9.0",
+    "@manifoldco/swagger-to-ts": "^2.0.0",
+    "@quickbaseoss/babel-plugin-styled-components-css-namespace": "1.0.1",
+    "@svgr/cli": "^5.5.0",
+    "@testing-library/react": "^10.0.3",
+    "@types/braintree-web": "^3.75.23",
+    "@types/jest": "^25.2.1",
+    "@types/react": "^16.14.6",
+    "@types/react-dom": "^16.9.6",
+    "@types/styled-components": "^5.1.26",
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
+    "@typescript-eslint/parser": "^2.29.0",
+    "babel-jest": "^25.4.0",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-styled-components": "^1.10.7",
+    "case-sensitive-paths-webpack-plugin": "^2.3.0",
+    "copy-webpack-plugin": "^5.1.2",
+    "dotenv": "^8.6.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "file-loader": "^6.0.0",
+    "html-webpack-plugin": "^4.2.0",
+    "hungry-fetch": "^0.9.0",
+    "husky": "4.2.5",
+    "jest": "^25.4.0",
+    "js-yaml": "^3.14.0",
+    "license-checker": "^25.0.1",
+    "lint-staged": "10.5.4",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.3",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.44.2",
+    "webpack-bundle-analyzer": "^3.7.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-manifest-plugin": "^2.2.0",
+    "whatwg-fetch": "3.6.2"
+  },
+  "dependencies": {
+    "@types/applepayjs": "3.0.1",
+    "@types/googlepay": "^0.7.0",
+    "@types/react-input-mask": "^3.0.1",
+    "braintree-web": "^3.92.2",
+    "core-js": "^3.12.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-input-mask": "^3.0.0-alpha.2",
+    "react-is": "^18.1.0",
+    "styled-components": "^5.3.6",
+    "swr": "^0.3.0",
+    "jest-junit": "^16.0.0",
+    "serve": "^14.2.1"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js"
+    },
+    "setupFiles": [
+      "<rootDir>/jest.setup.js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.mute-console.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/node_modules/",
+      "<rootDir>/src/components/Icon",
+      "<rootDir>/src/types.ts"
+    ],
+    "reporters": [
+      "default",
+      [ "jest-junit", { "suiteName": "jest tests", "outputDirectory": ".",
+      "outputName": "test/unittest.xml" } ]
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --cache --fix"
+    ]
+  }
+}
