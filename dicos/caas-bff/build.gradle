@@ -1,0 +1,263 @@
+import com.github.jk1.license.render.*
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+plugins {
+    id 'com.github.jk1.dependency-license-report' version '2.5'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'idea'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'java'
+    id 'java-library' // needed to make sure that transitive deps have 'compile' scope
+    id 'maven-publish'
+    id 'jacoco'
+    id 'org.sonarqube' version '4.0.0.2929'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'org.openapi.generator' version '7.3.0'
+}
+
+ext {
+    versions = [
+            lombok: "1.18.30",
+            mapstruct: "1.5.5.Final",
+            cucumber: "7.15.0",
+            mockito: "5.4.0",
+            junit: "5.4.0",
+            junitJupiter: "5.10.2",
+            restAssured: "5.4.0",
+            springBoot: "3.2.3"
+    ]
+}
+
+version = "0.0.1-SNAPSHOT"
+group = "com.dhl.dicos"
+java.sourceCompatibility = JavaVersion.toVersion("17")
+licenseReport.excludeBoms = true
+
+repositories {
+    maven {
+        url "https://artifactory.dhl.com/maven-remote"
+    }
+}
+configurations {
+    configureEach {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+
+}
+
+dependencies {
+    // Spring
+    implementation "org.springframework.boot:spring-boot-starter"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-log4j2"
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation ("org.springframework.boot:spring-boot-starter-webflux") {
+        {
+            exclude(group: 'org.springframework.boot', module: 'spring-boot-starter-reactor-netty')
+        }
+    }
+
+    // Common
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.14.2"
+    implementation "commons-lang:commons-lang:2.6"
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+    implementation "org.projectlombok:lombok:${versions.lombok}"
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation "org.mapstruct:mapstruct:${versions.mapstruct}"
+    annotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${versions.mapstruct}"
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.nimbusds:nimbus-jose-jwt:9.37.3'
+
+    // OpenAPI and Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+    implementation 'io.swagger.core.v3:swagger-annotations:2.2.20'
+    implementation "org.openapitools:jackson-databind-nullable:0.2.6"
+    implementation 'org.openapitools:openapi-generator:7.3.0'
+    implementation 'org.json:json:20231013'
+
+    //Opentelemetry / Observability with Spring Boot 3
+    // https://spring.io/blog/2022/10/12/observability-with-spring-boot-3/
+    // To add observation features (to add Micrometer to the classpath)
+    implementation "org.springframework.boot:spring-boot-starter-actuator:${versions.springBoot}"
+    // To create observations by using the @Observed aspect
+    implementation "org.springframework.boot:spring-boot-starter-aop:${versions.springBoot}"
+    // For Micrometer metrics with Prometheus
+    implementation "io.micrometer:micrometer-registry-prometheus"
+    // For Tracing Context Propagation with Micrometer Tracing we pick Zipkin Brave by adding the
+    implementation "io.micrometer:micrometer-tracing-bridge-brave"
+    // For Latency Visualization, we need to send the finished spans in some format to a server.
+    // In our case, we produce an Zipkin-compliant span
+    // endpoint is default to "http://localhost:9411/api/v2/spans" by actuator
+    // we could setting by management.zipkin.tracing.endpoint
+    implementation "io.zipkin.reporter2:zipkin-reporter-brave"
+
+    /* TEST DEPENDENCIES*/
+    testAnnotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+    testImplementation("org.springframework.boot:spring-boot-starter-test"){
+        exclude(group: 'com.vaadin.external.google', module: 'android-json')
+    }
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${versions.junitJupiter}"
+    testImplementation "org.mockito:mockito-core:${versions.mockito}"
+    testImplementation "org.mockito:mockito-junit-jupiter:${versions.junit}"
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.11.0'
+    testImplementation 'com.squareup.okhttp3:okhttp:4.11.0'
+    testImplementation "io.cucumber:cucumber-java:${versions.cucumber}"
+    testImplementation "io.cucumber:cucumber-spring:${versions.cucumber}"
+    testImplementation "io.cucumber:cucumber-junit-platform-engine:${versions.cucumber}"
+    testImplementation 'io.cucumber:cucumber-junit:7.15.0'
+    testImplementation "io.rest-assured:rest-assured:${versions.restAssured}"
+}
+
+//idea.module.sourceDirs += file('$buildDir/generated')
+//idea.module.generatedSourceDirs += file('$buildDir/generated')
+//if 'content root' (as IDEA calls it) of the module is different
+idea.module.contentRoot = file('../..')
+
+// this works, but it is not working with single quotes!!
+sourceSets.main.java.srcDirs += "$buildDir/generated/src/main/java"
+sourceSets.main.java.srcDirs += "$buildDir/api-client-generated/src/main/java"
+// for checking the current settings of all source Dirs, especially the generated one
+sourceSets.main.java.srcDirs.each { println "javaMains: "+it }
+
+// avoiding the clash with the OPENAPI generated Main-Class
+springBoot.mainClass = 'com.dhl.dicos.CaasBffApplication'
+// always generate the API during the build task
+//compileJava.dependsOn tasks.openApiGenerate
+
+sonarqube {
+    properties {
+        property("sonar.projectKey", "de.deutschepost.dicos.caas-bff")
+        property("sonar.projectName", "ITR-4195-DiCoS-caas-bff")
+        property("sonar.host.url", "https://sonarqube1.lcm.deutschepost.de")
+        property("sonar.qualitygate.wait", "true")
+        property("sonar.coverage.exclusions", "**/config/*,**/exception/*,**/constants/*,**/config/ctp/*Properties.java")
+        property("sonar.exclusions", "**/config/*,**/exception/*,**/constants/*,**/config/ctp/*Properties.java,**/model/HealthResponse.java")
+    }
+}
+
+licenseReport {
+    unionParentPomLicenses = false
+    projects = [project] + project.subprojects
+    configurations = ['runtimeClasspath']
+    excludeOwnGroup = true
+    renderers = [new JsonReportRenderer('oslc-gradle-plugin-report.json', false)]
+    allowedLicensesFile = new File("allowed-licenses.json")
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+    reports {
+        xml.required = true
+        csv.required = false
+    }
+}
+
+task cucumber() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+                    '--plugin', 'pretty',
+                    '--plugin', 'junit:integration-test/cucumber.xml',
+                    '--plugin', 'html:integration-test/cucumber.html',
+                    '--plugin', 'json:integration-test/cucumber.json',
+                    '--glue', 'com.dhl.dicos.stepdefinition',
+                    'src/test/resources/feature']
+        }
+    }
+}
+
+processResources {
+    filesMatching("**/application.yml") {
+        expand( project.properties )
+    }
+}
+
+tasks.register('buildOpenApiCaasBffApiService', GenerateTask) {
+    generatorName.set("spring")
+    inputSpec.set("$projectDir/src/main/resources/caasBff.yaml")
+    outputDir.set("$buildDir/generated")
+    apiPackage.set("com.dhl.dicos.api")
+    invokerPackage.set("com.dhl.dicos.invoker")
+    modelPackage.set("com.dhl.dicos.model")
+    skipValidateSpec.set(true)
+    configOptions.set([
+            dateLibrary   : "java17",
+            interfaceOnly : "true",
+            useSpringBoot3: "true",
+            useTags: "true"
+
+    ])
+}
+
+tasks.register("buildOpenApiCartsServiceClient", GenerateTask) {
+    generatorName.set("java")
+    inputSpec.set("$projectDir/src/main/resources/client/cartsService.yaml")
+    outputDir.set("$buildDir/api-client-generated")
+    apiPackage.set("com.dhl.dicos.cartservice.client.api")
+    invokerPackage.set("com.dhl.dicos.cartservice.client.invoker")
+    modelPackage.set("com.dhl.dicos.cartservice.client.model")
+    skipValidateSpec.set(true)
+    library.set("webclient")
+    configOptions.set([
+            dateLibrary: "java17"
+    ])
+}
+
+tasks.register("buildOpenApiPaymentsServiceClient", GenerateTask) {
+    generatorName.set("java")
+    inputSpec.set("$projectDir/src/main/resources/client/paymentsService.yaml")
+    outputDir.set("$buildDir/api-client-generated")
+    apiPackage.set("com.dhl.dicos.paymentsservice.client.api")
+    invokerPackage.set("com.dhl.dicos.paymentsservice.client.invoker")
+    modelPackage.set("com.dhl.dicos.paymentsservice.client.model")
+    skipValidateSpec.set(true)
+    library.set("webclient")
+    configOptions.set([
+            dateLibrary: "java17"
+    ])
+}
+
+tasks.register("buildOpenApiOrdersServiceClient", GenerateTask) {
+    generatorName.set("java")
+    inputSpec.set("$projectDir/src/main/resources/client/ordersService.yaml")
+    outputDir.set("$buildDir/api-client-generated")
+    apiPackage.set("com.dhl.dicos.orderservice.client.api")
+    invokerPackage.set("com.dhl.dicos.orderservice.client.invoker")
+    modelPackage.set("com.dhl.dicos.orderservice.client.model")
+    skipValidateSpec.set(true)
+    library.set("webclient")
+    configOptions.set([
+            dateLibrary: "java17"
+    ])
+}
+
+tasks.register("buildOpenApiContentsServiceClient", GenerateTask) {
+    generatorName.set("java")
+    inputSpec.set("$projectDir/src/main/resources/client/contentsService.yaml")
+    outputDir.set("$buildDir/api-client-generated")
+    apiPackage.set("com.dhl.dicos.contentsservice.client.api")
+    invokerPackage.set("com.dhl.dicos.contentsservice.client.invoker")
+    modelPackage.set("com.dhl.dicos.contentsservice.client.model")
+    skipValidateSpec.set(true)
+    library.set("webclient")
+    configOptions.set([
+            dateLibrary: "java17"
+    ])
+}
+
+tasks.compileJava.dependsOn('buildOpenApiCaasBffApiService','buildOpenApiCartsServiceClient','buildOpenApiOrdersServiceClient', 'buildOpenApiPaymentsServiceClient', 'buildOpenApiContentsServiceClient')
