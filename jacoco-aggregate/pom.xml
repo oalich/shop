@@ -208,11 +208,10 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- https://mvnrepository.com/artifact/org.owasp/dependency-check-maven/9.0.8 -->
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
-				<version>9.0.8</version>
+				<version>${dependency-check.version}</version>
 				<configuration>
 					<analyzers>
 	                    <retirejs>
