@@ -9,31 +9,46 @@
     <name>efiliale</name>
     <description>efiliale Parent</description>
     <properties>
-        <argLine>-Xmx2G -XX:MetaspaceSize=512M -XX:MaxMetaspaceSize=2G -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/export/jenkins/heapdump -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xloggc:/export/jenkins/heapdump/gc.log  -XX:-UseSplitVerifier</argLine>
+        <argLine>-Xmx2G -XX:MetaspaceSize=512M -XX:MaxMetaspaceSize=2G -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/export/jenkins/heapdump -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xloggc:/export/jenkins/heapdump/gc.log</argLine>
         <atg-depdendency.version>11.3.2</atg-depdendency.version>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <properties-maven.version>1.2.1</properties-maven.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <maven-surefire.version>3.2.5</maven-surefire.version>
+        <maven-clean.version>3.3.2</maven-clean.version>
+        <maven-resources.version>3.3.1</maven-resources.version>
+        <maven-antrun.version>3.1.0</maven-antrun.version>
+        <maven-dependency.version>3.6.1</maven-dependency.version>
+        <maven-jar.version>3.3.0</maven-jar.version>
+        <versions-maven.version>2.16.2</versions-maven.version>
+        <jacoco.version>0.8.11</jacoco.version>
+        <jacoco.agent.version>0.8.11</jacoco.agent.version>
+        <dependency-check.version>9.0.10</dependency-check.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>iso-8859-15</project.build.sourceEncoding>
         <file>project.${env_site}.properties</file>
         <resourcebundles.dir>src/main/etc/resourcebundles</resourcebundles.dir>
-        <powermock.version>2.0.2</powermock.version>
-        <mockito.version>1.10.19</mockito.version>
+        <!-- https://mvnrepository.com/artifact/org.powermock/powermock-api-easymock -->
+        <powermock.version>2.0.9</powermock.version>
         <ear.dir>${atg.dir}/home/bin</ear.dir>
         <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
     </properties>
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-resources-plugin -->
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-resources-plugin</artifactId>
-            <version>3.2.0</version>
+            <version>${maven-resources.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-clean-plugin -->
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-clean-plugin</artifactId>
-            <version>3.1.0</version>
+            <version>${maven-clean.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>versions-maven-plugin</artifactId>
+            <version>${versions-maven.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/ant-contrib/ant-contrib -->
         <dependency>
@@ -65,6 +80,12 @@
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.4</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.microsoft.azure/msal4j -->
+        <dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>msal4j</artifactId>
+			<version>1.14.3</version>
+		</dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -75,7 +96,7 @@
         <dependency>
             <groupId>commons-dbutils</groupId>
             <artifactId>commons-dbutils</artifactId>
-            <version>1.7</version>
+            <version>1.8.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/commons-discovery/commons-discovery -->
         <dependency>
@@ -87,31 +108,31 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.10.0</version>
+            <version>2.15.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
+            <version>3.14.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.9</version>
+            <version>1.11.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <version>1.2</version>
+            <version>1.3.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
-            <version>3.8.0</version>
+            <version>3.10.0</version>
         </dependency>
         <dependency>
             <groupId>com.idautomation.linear</groupId>
@@ -122,26 +143,26 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>30.1.1-jre</version>
+            <version>33.1.0-jre</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.guava/failureaccess -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>failureaccess</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.checkerframework/checker-qual -->
         <dependency>
             <groupId>org.checkerframework</groupId>
             <artifactId>checker-qual</artifactId>
-            <version>3.17.0</version>
+            <version>3.42.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.errorprone/error_prone_annotation -->
         <dependency>
-            <groupId>com.google.errorprone</groupId>
-            <artifactId>error_prone_annotation</artifactId>
-            <version>2.9.0</version>
-        </dependency>
+		    <groupId>com.google.errorprone</groupId>
+		    <artifactId>error_prone_annotations</artifactId>
+		    <version>2.26.1</version>
+		</dependency>
         <!-- https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305 -->
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -154,39 +175,42 @@
             <artifactId>encoder</artifactId>
             <version>1.2.3</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.owasp.encoder/encoder-jsp -->
+        <dependency>
+            <groupId>org.owasp.encoder</groupId>
+            <artifactId>encoder-jsp</artifactId>
+            <version>1.2.3</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcmail-jdk15to18 -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcmail-jdk15to18</artifactId>
-            <version>1.69</version>
+            <version>1.78</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpg-jdk15to18 -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpg-jdk15to18</artifactId>
-            <version>1.69</version>
+            <version>1.78</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15to18 -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15to18</artifactId>
-            <version>1.69</version>
+            <version>1.78</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15to18 -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk15to18</artifactId>
-            <version>1.69</version>
+            <version>1.78</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcutil-jdk15to18 -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcutil-jdk15to18</artifactId>
-            <version>1.69</version>
+            <version>1.78</version>
         </dependency>
-        <!-- <dependency> <groupId>org.bouncycastle</groupId> <artifactId>bcprov-ext-jdk15on</artifactId>
-            <version>1.65</version> </dependency> -->
-        <!-- TODO - Check version -->
         <dependency>
             <groupId>com.sun.security</groupId>
             <artifactId>jcert</artifactId>
@@ -196,55 +220,55 @@
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
-            <version>2.12.1</version>
+            <version>2.12.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.14.1</version>
+            <version>2.23.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.14.1</version>
+            <version>2.23.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-web -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-web</artifactId>
-            <version>2.14.1</version>
+            <version>2.23.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.12.5</version>
+            <version>2.17.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.12.5</version>
+            <version>2.17.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.12.5</version>
+            <version>2.17.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.5</version>
+            <version>1.3.14</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.2.5</version>
+            <version>1.3.14</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/ch.qos.logback.contrib/logback-jackson -->
         <dependency>
@@ -268,37 +292,31 @@
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>6.6</version>
+            <version>7.4</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.32</version>
+            <version>2.0.12</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.jdom/jdom2 -->
         <dependency>
             <groupId>org.jdom</groupId>
             <artifactId>jdom2</artifactId>
-            <version>2.0.6</version>
+            <version>2.0.6.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
         <!-- https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient -->
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
             <version>3.1</version>
         </dependency>
+         <!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
         <dependency>
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
             <version>2.1.7</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/soap/soap -->
-        <dependency>
-            <groupId>soap</groupId>
-            <artifactId>soap</artifactId>
-            <version>2.3.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.jcraft/jsch -->
         <dependency>
@@ -310,61 +328,77 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.8</version>
+            <version>2.10.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.14.2</version>
+            <version>1.17.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpasyncclient -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>
-            <version>4.1.4</version>
+            <version>4.1.5</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.13</version>
+            <version>4.5.14</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>4.4.14</version>
+            <version>4.4.16</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore-nio -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore-nio</artifactId>
-            <version>4.4.14</version>
+            <version>4.4.16</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/logging-interceptor -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>logging-interceptor</artifactId>
-            <version>4.9.1</version>
+            <version>4.12.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.9.1</version>
+            <version>4.12.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.squareup.okio/okio -->
         <dependency>
             <groupId>com.squareup.okio</groupId>
             <artifactId>okio</artifactId>
-            <version>2.10.0</version>
+            <version>3.9.0</version>
         </dependency>
+          <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio-jvm</artifactId>
+            <version>3.7.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib -->
         <dependency>
-        <!-- https://mvnrepository.com/artifact/com.squareup.okio/okio -->
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>1.9.23</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-common -->
+		<dependency>
+		    <groupId>org.jetbrains.kotlin</groupId>
+		    <artifactId>kotlin-stdlib-common</artifactId>
+		    <version>1.9.23</version>
+		</dependency>
+        <dependency>
             <groupId>de.gevabs</groupId>
             <artifactId>gevaik</artifactId>
-            <version>4.0</version>
+            <version>7.0</version>
         </dependency>
         <dependency>
             <groupId>com.java4less</groupId>
@@ -375,7 +409,7 @@
         <dependency>
             <groupId>com.oracle.database.xml</groupId>
             <artifactId>xmlparserv2</artifactId>
-            <version>21.1.0.0</version>
+            <version>23.3.0.23.09</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/xml-apis/xml-apis -->
         <dependency>
@@ -387,7 +421,7 @@
         <dependency>
             <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
-            <version>2.7.2</version>
+            <version>2.7.3</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/xml-resolver/xml-resolver -->
         <dependency>
@@ -399,7 +433,7 @@
         <dependency>
             <groupId>xalan</groupId>
             <artifactId>serializer</artifactId>
-            <version>2.7.2</version>
+            <version>2.7.3</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/javax.xml.xquery/xqj-api -->
         <dependency>
@@ -426,7 +460,7 @@
         <dependency>
             <groupId>com.sun.xml.fastinfoset</groupId>
             <artifactId>FastInfoset</artifactId>
-            <version>2.0.0</version>
+            <version>2.1.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.axis/axis -->
         <dependency>
@@ -446,13 +480,13 @@
             <artifactId>saaj-api</artifactId>
             <version>1.3.5</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.xml/jaxrpc -->
+        <!-- https://mvnrepository.com/artifact/javax.xml/jaxrpc-api -->
         <dependency>
             <groupId>javax.xml</groupId>
             <artifactId>jaxrpc-api</artifactId>
             <version>1.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/nl.captcha/simplecaptcha -->
+        <!-- https://mvnrepository.com/artifact/nl.captcha/simple-captcha -->
         <dependency>
             <groupId>nl.captcha</groupId>
             <artifactId>simplecaptcha</artifactId>
@@ -462,25 +496,31 @@
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
-            <version>5.5.2</version>
+            <version>5.9</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt -->
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
-            <version>9.13</version>
+            <version>9.37.3</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/fluent-hc -->
+        <!-- https://mvnrepository.com/artifact/com.nimbusds/oauth2-oidc-sdk -->
+        <dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>oauth2-oidc-sdk</artifactId>
+			<version>11.9</version>
+		</dependency>
+		 <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/fluent-hc -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>
-            <version>4.5.13</version>
+            <version>4.5.14</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.braintreepayments.gateway/braintree-java -->
         <dependency>
             <groupId>com.braintreepayments.gateway</groupId>
             <artifactId>braintree-java</artifactId>
-            <version>3.12.0</version>
+            <version>3.34.0</version>
         </dependency>
             <!-- https://mvnrepository.com/artifact/org.apache.ws.commons.axiom/axiom-api -->
         <dependency>
@@ -546,7 +586,7 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.15</version>
+            <version>1.16.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.woden/woden-core -->
         <dependency>
@@ -558,19 +598,19 @@
         <dependency>
             <groupId>org.apache.ws.xmlschema</groupId>
             <artifactId>xmlschema-core</artifactId>
-            <version>2.2.5</version>
+            <version>2.3.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.neethi/neethi -->
         <dependency>
             <groupId>org.apache.neethi</groupId>
             <artifactId>neethi</artifactId>
-            <version>3.1.1</version>
+            <version>3.2.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.james/apache-mime4j-core -->
         <dependency>
             <groupId>org.apache.james</groupId>
             <artifactId>apache-mime4j-core</artifactId>
-            <version>0.8.5</version>
+            <version>0.8.11</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.axis2/axis2-transport-local -->
         <dependency>
@@ -582,13 +622,13 @@
         <dependency>
             <groupId>commons-cli</groupId>
             <artifactId>commons-cli</artifactId>
-            <version>1.4</version>
+            <version>1.6.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.4</version>
+            <version>1.5</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.codehaus.woodstox/woodstox-core-asl -->
         <dependency>
@@ -606,133 +646,133 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>5.0.0</version>
+            <version>5.2.3</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/net.lingala.zip4j/zip4j -->
         <dependency>
             <groupId>net.lingala.zip4j</groupId>
             <artifactId>zip4j</artifactId>
-            <version>2.9.0</version>
+            <version>2.11.5</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/xmlgraphics-commons -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>xmlgraphics-commons</artifactId>
-            <version>2.6</version>
+            <version>2.9</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-awt-util -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-awt-util</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-bridge -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-bridge</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-constants -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-constants</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-css -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-css</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-dom -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-dom</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-ext -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-ext</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-gvt -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-gvt</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-i18n -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-i18n</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-parser -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-parser</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-script -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-script</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-svg-dom -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-svg-dom</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-svggen -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-svggen</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-transcoder -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-transcoder</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-util -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-util</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-xml -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-xml</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-anim -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-anim</artifactId>
-            <version>1.14</version>
+            <version>1.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
-            <version>2.0.24</version>
+            <version>2.0.29</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.pdfbox/fontbox -->
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>fontbox</artifactId>
-            <version>2.0.24</version>
+            <version>2.0.29</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/fop -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>fop</artifactId>
-            <version>2.6</version>
+            <version>2.8</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/javax.media/jai-core -->
         <dependency>
@@ -746,12 +786,6 @@
             <artifactId>jai-codec</artifactId>
             <version>1.1.3</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib -->
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
-            <version>1.5.30</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -764,7 +798,7 @@
             <artifactId>javax.ws.rs-api</artifactId>
             <version>2.1.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.glassfish/javax.ejb -->
+        <!-- https://mvnrepository.com/artifact/org.glassfish.main.ejb/javax.ejb -->
         <dependency>
             <groupId>org.glassfish.main.ejb</groupId>
             <artifactId>javax.ejb</artifactId>
@@ -775,19 +809,19 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient-cache</artifactId>
-            <version>4.5.13</version>
+            <version>4.5.14</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient-win -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient-win</artifactId>
-            <version>4.5.13</version>
+            <version>4.5.14</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
-            <version>4.5.13</version>
+            <version>4.5.14</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb1-impl -->
         <dependency>
@@ -801,17 +835,11 @@
             <artifactId>jna</artifactId>
             <version>4.1.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.jglobus/jsse -->
-        <dependency>
-            <groupId>org.jglobus</groupId>
-            <artifactId>jsse</artifactId>
-            <version>2.1.0</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.codehaus.woodstox/stax2-api -->
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
             <artifactId>stax2-api</artifactId>
-            <version>4.2.1</version>
+            <version>4.2.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.taglibs/taglibs-standard-impl -->
         <dependency>
@@ -825,18 +853,11 @@
             <artifactId>taglibs-standard-impl</artifactId>
             <version>1.2.5</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.testng/testng -->
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>6.14.3</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/io.swagger/swagger-annotations -->
+        <!-- https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations -->
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>2.1.10</version>
+            <version>2.2.21</version>
         </dependency>
         <!-- custom jar, should not be upgraded -->
         <dependency>
@@ -844,12 +865,30 @@
             <artifactId>swagger-java-client</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.servlet.jsp/jsp-api -->
+        <!-- https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api -->
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>javax.servlet.jsp-api</artifactId>
             <version>2.3.3</version>
         </dependency>
+       <!-- https://mvnrepository.com/artifact/dev.samstevens.totp/totp -->
+		<dependency>
+		    <groupId>dev.samstevens.totp</groupId>
+		    <artifactId>totp</artifactId>
+		    <version>1.7.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.zxing/javase -->
+		<dependency>
+		    <groupId>com.google.zxing</groupId>
+		    <artifactId>javase</artifactId>
+		    <version>3.5.3</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
+		<dependency>
+		    <groupId>com.google.zxing</groupId>
+		    <artifactId>core</artifactId>
+		    <version>3.5.3</version>
+		</dependency>
         <!-- https://mvnrepository.com/artifact/com.oracle.weblogic/wljmsclient -->
         <dependency>
             <groupId>com.oracle.weblogic</groupId>
@@ -875,7 +914,7 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>3.8.1</version>
+            <version>3.8.7</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/maven-taglib/maven-taglib-plugin -->
         <dependency>
@@ -885,32 +924,31 @@
             <scope>test</scope>
         </dependency>
         <!-- JUNIT DEPENDENCIES START -->
-        <!-- TODO CHECK -->
+        <!-- https://mvnrepository.com/artifact/org.testng/testng -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.5.1</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>junit.atgdust</groupId>
             <artifactId>atgdust</artifactId>
             <version>1.2.2</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/cglib/cglib-nodep -->
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
-            <version>3.0</version>
-            <scope>test</scope>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.1</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.easymock/easymock -->
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
-            <version>3.5.1</version>
+            <version>4.3</version>
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.powermock/powermock-api-easymock -->
@@ -920,25 +958,11 @@
             <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.powermock/powermock-api-mockito -->
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <version>1.7.4</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.powermock/powermock-api-mockito -->
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito-common</artifactId>
-            <version>1.7.4</version>
-            <scope>test</scope>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.powermock/powermock-api-mockito2 -->
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-api-mockito2</artifactId>
-            <version>2.0.4</version>
+            <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.powermock/powermock-api-support -->
@@ -994,7 +1018,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.1.0</version>
+            <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -1010,186 +1034,44 @@
             <version>1.2.6</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-betwixt/commons-betwixt -->
-        <dependency>
-            <groupId>commons-betwixt</groupId>
-            <artifactId>commons-betwixt</artifactId>
-            <version>0.8</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.2.2</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-digester/commons-digester -->
-        <dependency>
-            <groupId>commons-digester</groupId>
-            <artifactId>commons-digester</artifactId>
-            <version>1.7</version>
-             <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-logging/commons-logging-api -->
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging-api</artifactId>
-            <version>1.0.4</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-pool/commons-pool -->
-        <dependency>
-            <groupId>commons-pool</groupId>
-            <artifactId>commons-pool</artifactId>
-            <version>1.3</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.ddlutils/ddlutils -->
-        <dependency>
-            <groupId>org.apache.ddlutils</groupId>
-            <artifactId>ddlutils</artifactId>
-            <version>1.0</version>
-            <scope>test</scope>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.dom4j/dom4j -->
         <dependency>
             <groupId>org.dom4j</groupId>
             <artifactId>dom4j</artifactId>
-            <version>2.1.3</version>
+            <version>2.1.4</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest-all -->
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
-            <version>1.1</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest-core -->
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <version>1.3</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.hsqldb/hsqldb -->
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>1.8.0.10</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.opensaml/opensaml -->
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml</artifactId>
-            <version>2.6.4</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.opensaml/xmltooling -->
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>xmltooling</artifactId>
-            <version>1.4.4</version>
-        </dependency>
-            <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.32</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.santuario/xmlsec -->
-        <dependency>
-            <groupId>org.apache.santuario</groupId>
-            <artifactId>xmlsec</artifactId>
-            <version>2.2.3</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.opensaml/openws -->
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>openws</artifactId>
-            <version>1.5.4</version>
+            <version>2.0.12</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.owasp.esapi/esapi -->
         <dependency>
             <groupId>org.owasp.esapi</groupId>
             <artifactId>esapi</artifactId>
-            <version>2.2.3.1</version>
+            <version>2.5.3.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/ca.juliusdavies/not-yet-commons-ssl -->
-        <dependency>
-            <groupId>ca.juliusdavies</groupId>
-            <artifactId>not-yet-commons-ssl</artifactId>
-            <version>0.3.11</version>
-        </dependency>
-        <dependency>
-            <groupId>isorelax</groupId>
-            <artifactId>isorelax</artifactId>
-            <version>20020414</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/javassist/javassist -->
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.27.0-GA</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/msv/msv -->
-        <dependency>
-            <groupId>msv</groupId>
-            <artifactId>msv</artifactId>
-            <version>20020414</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/oro/oro -->
-        <dependency>
-            <groupId>oro</groupId>
-            <artifactId>oro</artifactId>
-            <version>2.0.8</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
+       <dependency>
             <groupId>junit.atgdust</groupId>
             <artifactId>quick-json</artifactId>
             <version>1.0.2.3</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/relaxngDatatype/relaxngDatatype -->
+   <!--  https://mvnrepository.com/artifact/com.auth0/java-jwt -->
         <dependency>
-            <groupId>relaxngDatatype</groupId>
-            <artifactId>relaxngDatatype</artifactId>
-            <version>20020414</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.objenesis/objenesis -->
-        <dependency>
-            <groupId>org.objenesis</groupId>
-            <artifactId>objenesis</artifactId>
-            <version>2.6</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/saxpath/saxpath -->
-        <dependency>
-            <groupId>saxpath</groupId>
-            <artifactId>saxpath</artifactId>
-            <version>1.0-FCS</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.4</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>stax</groupId>
-            <artifactId>stax-api</artifactId>
-            <version>1.0.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
+        	<groupId>com.auth0</groupId>
+         	<artifactId>java-jwt</artifactId>
+  			<version>4.4.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.auth0/jwks-rsa -->
+		<dependency>
+		    <groupId>com.auth0</groupId>
+		    <artifactId>jwks-rsa</artifactId>
+		    <version>0.22.1</version>
+		</dependency>
+         <dependency>
             <groupId>junit.atgdust</groupId>
             <artifactId>webservices</artifactId>
             <version>1.0</version>
@@ -1270,7 +1152,7 @@
         <dependency>
             <groupId>de.factfinder.client</groupId>
             <artifactId>factfinder-efiliale-client</artifactId>
-            <version>2.0.0</version>
+            <version>5.0.0</version>
         </dependency>
         <dependency>
             <groupId>de.dpag.efiliale.business.addresscorrection</groupId>
@@ -1285,7 +1167,7 @@
         <dependency>
             <groupId>de.dpag.efiliale.communication.sap.point.service</groupId>
             <artifactId>point_service</artifactId>
-            <version>4.0</version>
+            <version>5.0</version>
         </dependency>
         <dependency>
             <groupId>de.dpag.efiliale.communication.sap.point.service.response</groupId>
@@ -1295,11 +1177,6 @@
         <dependency>
             <groupId>de.dpag.efiliale.atg.adapter.gsa</groupId>
             <artifactId>propertyDescriptors</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>de.dpag.oneclickforaccountdata</groupId>
-            <artifactId>1C4AccData</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -1377,12 +1254,11 @@
             <artifactId>prodWS</artifactId>
             <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>de.dpag.efiliale.communication.postcardreport</groupId>
-            <artifactId>postcardreport</artifactId>
-            <version>1.0</version>
-        </dependency>
-
+       <dependency>
+		    <groupId>de.dpag.efiliale.communication.globuss</groupId>
+		    <artifactId>postcardreport</artifactId>
+		    <version>2.0</version>
+		</dependency>
         <dependency>
             <groupId>de.dpag.efiliale.presentation</groupId>
             <artifactId>TrackAndMatch</artifactId>
@@ -1396,7 +1272,12 @@
         <dependency>
             <groupId>de.dpag.efiliale.redirection</groupId>
             <artifactId>azln</artifactId>
-            <version>2.0</version>
+            <version>3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>de.dpag.efiliale.communication</groupId>
+            <artifactId>xrechnung</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
     <modules>
@@ -1468,7 +1349,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>6.2.2</version>
+                <version>${dependency-check.version}</version>
             </plugin>
         </plugins>
     </build>

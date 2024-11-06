@@ -11,11 +11,11 @@
     "gulp": "^4.0.2",
     "gulp-typescript": "^4.0.2",
     "typescript": "^3.9.10",
-    "webpack": "^5.56.1",
+    "webpack": "^5.94.0",
     "webpack-stream": "^7.0.0"
   },
   "dependencies": {
-    "axios": "^0.21.4",
+    "axios": "^1.6.8",
     "es6-promise": "^4.2.8",
     "jquery": "^3.6.0",
     "promise-polyfill": "^8.2.0",
