@@ -26,6 +26,6 @@
         "photoswipe": "^4.1.3",
         "promise-polyfill": "^8.2.0",
         "underscore": "^1.13.1",
-        "vue": "^2.6.14"
+        "vue": "^3.0.0"
     }
 }
